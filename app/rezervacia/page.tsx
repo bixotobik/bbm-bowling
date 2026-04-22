@@ -157,7 +157,7 @@ export default function RezervaciaPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
         <AnimatePresence mode="wait">
 
-          {/* SUCCESS */}
+          {/* SUCCESS — pending, waiting for email confirmation */}
           {step === 'success' && (
             <motion.div
               key="success"
@@ -165,17 +165,24 @@ export default function RezervaciaPage() {
               animate={{ opacity: 1, scale: 1 }}
               className="bg-white rounded-3xl p-12 text-center"
             >
-              <div className="w-20 h-20 bg-[#22C55E]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-10 h-10 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: '#03AED220' }}>
+                <svg className="w-10 h-10" fill="none" stroke="#03AED2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
-              <h2 className="text-3xl font-black mb-3">{lang === 'sk' ? 'Rezervácia potvrdená!' : 'Booking confirmed!'}</h2>
-              <p className="text-black/50 mb-2">{t(T.booking.confirmation, lang)}</p>
-              <p className="text-black/50 mb-8">
-                {selectedDate} · {formatHour(startHour ?? 0)} – {formatHour((startHour ?? 0) + duration)} · {lang === 'sk' ? 'Dráha' : 'Lane'} {selectedLane}
+              <h2 className="text-3xl font-black mb-3">
+                {lang === 'sk' ? 'Skontrolujte email!' : 'Check your email!'}
+              </h2>
+              <p className="text-black/50 mb-2">
+                {lang === 'sk'
+                  ? `Poslali sme vám email na ${form.email}`
+                  : `We sent you an email to ${form.email}`}
               </p>
-              <div className="text-3xl font-black mb-8">{formatPrice(totalPrice)}</div>
+              <p className="text-black/40 text-sm mb-8">
+                {lang === 'sk'
+                  ? 'Kliknite na odkaz v emaili pre potvrdenie rezervácie.'
+                  : 'Click the link in the email to confirm your booking.'}
+              </p>
               <button
                 onClick={() => { setStep('date'); setSelectedDate(null); setStartHour(null); setForm({ name: '', email: '', phone: '', notes: '' }) }}
                 className="px-8 py-3 bg-black text-white font-bold rounded-full hover:bg-black/80 transition-all cursor-pointer"

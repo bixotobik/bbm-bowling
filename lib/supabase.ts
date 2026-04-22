@@ -8,7 +8,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export type ResourceType = 'bowling' | 'billiard' | 'darts'
 export type PricingTier = 'cheap' | 'medium' | 'peak' | 'closed'
-export type ReservationStatus = 'confirmed' | 'cancelled'
+export type ReservationStatus = 'pending' | 'confirmed' | 'cancelled'
 
 export interface Resource {
   id: string
