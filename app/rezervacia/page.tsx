@@ -235,6 +235,38 @@ export default function RezervaciaPage() {
         </div>
       </section>
 
+      {/* Step indicator */}
+      {step !== 'success' && (
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+          <div className="flex items-center gap-2">
+            {(['sport', 'quantity', 'date', 'time', 'form'] as Step[]).map((s, i) => {
+              const steps: Step[] = ['sport', 'quantity', 'date', 'time', 'form']
+              const currentIndex = steps.indexOf(step)
+              const isDone = i < currentIndex
+              const isActive = s === step
+              const labels: Record<Step, { sk: string; en: string }> = {
+                sport:    { sk: 'Šport',  en: 'Sport' },
+                quantity: { sk: 'Počet',  en: 'Count' },
+                date:     { sk: 'Dátum',  en: 'Date' },
+                time:     { sk: 'Čas',    en: 'Time' },
+                form:     { sk: 'Údaje',  en: 'Details' },
+                success:  { sk: '',       en: '' },
+              }
+              return (
+                <div key={s} className="flex items-center gap-2 flex-1">
+                  <div className="flex flex-col items-center gap-1 flex-1">
+                    <div className={`w-full h-1.5 rounded-full transition-all duration-300 ${isDone ? 'bg-black' : isActive ? 'bg-black' : 'bg-black/10'}`} />
+                    <span className={`text-xs font-bold hidden sm:block transition-colors ${isActive ? 'text-black' : isDone ? 'text-black/40' : 'text-black/20'}`}>
+                      {t(labels[s], lang)}
+                    </span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
         <AnimatePresence mode="wait">
 
