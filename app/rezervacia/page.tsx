@@ -380,12 +380,46 @@ export default function RezervaciaPage() {
               {/* Duration */}
               <div className="bg-white rounded-3xl p-6 mb-4">
                 <p className="text-xs font-bold uppercase tracking-widest text-black/30 mb-4">{t(T.booking.duration, lang)}</p>
-                <div className="flex gap-2">
-                  {Array.from({ length: MAX_HOURS }, (_, i) => i + 1).map(h => (
+                <div className="flex flex-wrap gap-2">
+                  {[1, 2, 3, 4, 5].map(h => (
                     <button key={h} onClick={() => { setDuration(h); setStartHour(null) }}
                       className={`w-12 h-12 rounded-xl font-black transition-all cursor-pointer ${duration === h ? 'bg-black text-white' : 'bg-black/5 hover:bg-black/10'}`}
                     >{h}h</button>
                   ))}
+
+                  {/* Custom hours input */}
+                  <div className="flex items-center gap-2 bg-black/5 rounded-xl px-3 h-12">
+                    <input
+                      type="number"
+                      min={1}
+                      max={openHours ? (openHours.close ?? 24) - (openHours.open ?? 0) : 12}
+                      value={duration > 5 ? duration : ''}
+                      placeholder={lang === 'sk' ? 'Vlastný' : 'Custom'}
+                      onChange={e => {
+                        const v = parseInt(e.target.value)
+                        if (v >= 1) { setDuration(v); setStartHour(null) }
+                      }}
+                      className="w-20 bg-transparent text-sm font-bold focus:outline-none placeholder:text-black/30"
+                    />
+                    <span className="text-xs text-black/40">hod</span>
+                  </div>
+
+                  {/* Celý deň */}
+                  <button
+                    onClick={() => {
+                      if (!openHours || openHours.open === null || openHours.close === null) return
+                      const fullDay = openHours.close - openHours.open
+                      setDuration(fullDay)
+                      setStartHour(openHours.open)
+                    }}
+                    className={`px-4 h-12 rounded-xl font-black text-sm transition-all cursor-pointer ${
+                      openHours && duration === (openHours.close ?? 0) - (openHours.open ?? 0)
+                        ? 'bg-black text-white'
+                        : 'bg-black/5 hover:bg-black/10'
+                    }`}
+                  >
+                    {lang === 'sk' ? 'Celý deň' : 'Full day'}
+                  </button>
                 </div>
               </div>
 
