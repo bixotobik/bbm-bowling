@@ -148,10 +148,10 @@ export default function RezervaciaPage() {
   }
 
   function calcPrice(): number {
-    if (!selectedDate || startHour === null) return 0
     const info = SPORTS[sport]
-    if (info.perGame) return 0 // darts: coin-operated, no fixed price
+    if (info.perGame) return 0
     if (info.flatPrice !== null) return info.flatPrice * duration * quantity
+    if (startHour === null) return 0
     return calculateTotalPrice(pricingRules, dayOfWeek, startHour, duration) * quantity
   }
 
