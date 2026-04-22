@@ -75,6 +75,7 @@ export default function RezervaciaPage() {
   const [closures, setClosures] = useState<Closure[]>([])
   const [resources, setResources] = useState<{ id: string; number: number }[]>([])
   const [form, setForm] = useState({ name: '', email: '', phone: '', notes: '' })
+  const [customDuration, setCustomDuration] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -390,14 +391,17 @@ export default function RezervaciaPage() {
                   {/* Custom hours input */}
                   <div className="flex items-center gap-2 bg-black/5 rounded-xl px-3 h-12">
                     <input
-                      type="number"
-                      min={1}
-                      max={openHours ? (openHours.close ?? 24) - (openHours.open ?? 0) : 12}
-                      value={duration > 5 ? duration : ''}
-                      placeholder={lang === 'sk' ? 'Vlastný' : 'Custom'}
+                      type="text"
+                      inputMode="numeric"
+                      value={customDuration}
+                      placeholder={lang === 'sk' ? 'Iný počet' : 'Custom'}
                       onChange={e => {
-                        const v = parseInt(e.target.value)
-                        if (v >= 1) { setDuration(v); setStartHour(null) }
+                        const raw = e.target.value.replace(/[^0-9]/g, '')
+                        setCustomDuration(raw)
+                        if (raw === '') return
+                        const v = parseInt(raw)
+                        const maxH = openHours ? (openHours.close ?? 24) - (openHours.open ?? 0) : 12
+                        if (v >= 1 && v <= maxH) { setDuration(v); setStartHour(null) }
                       }}
                       className="w-20 bg-transparent text-sm font-bold focus:outline-none placeholder:text-black/30"
                     />
