@@ -17,6 +17,7 @@ const SPORTS: Record<ResourceType, {
   color: string
   unit: { sk: string; en: string }
   flatPrice: number | null
+  perGame: boolean
 }> = {
   bowling: {
     label: { sk: 'Bowling', en: 'Bowling' },
@@ -24,6 +25,7 @@ const SPORTS: Record<ResourceType, {
     color: '#3B82F6',
     unit: { sk: 'dráhy', en: 'lanes' },
     flatPrice: null,
+    perGame: false,
   },
   billiard: {
     label: { sk: 'Biliard', en: 'Billiard' },
@@ -31,13 +33,15 @@ const SPORTS: Record<ResourceType, {
     color: '#22C55E',
     unit: { sk: 'stoly', en: 'tables' },
     flatPrice: 8.50,
+    perGame: false,
   },
   darts: {
     label: { sk: 'Šípky', en: 'Darts' },
     desc: { sk: '4 elektronické automaty', en: '4 electronic machines' },
     color: '#F59E0B',
     unit: { sk: 'automaty', en: 'machines' },
-    flatPrice: 5.00,
+    flatPrice: null,
+    perGame: true,
   },
 }
 
@@ -145,12 +149,14 @@ export default function RezervaciaPage() {
 
   function calcPrice(): number {
     if (!selectedDate || startHour === null) return 0
-    const sportInfo = SPORTS[sport]
-    if (sportInfo.flatPrice !== null) return sportInfo.flatPrice * duration * quantity
+    const info = SPORTS[sport]
+    if (info.perGame) return 0 // darts: coin-operated, no fixed price
+    if (info.flatPrice !== null) return info.flatPrice * duration * quantity
     return calculateTotalPrice(pricingRules, dayOfWeek, startHour, duration) * quantity
   }
 
   const totalPrice = calcPrice()
+  const isDarts = SPORTS[sport].perGame
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -506,7 +512,10 @@ export default function RezervaciaPage() {
                   <div className="text-white">
                     <p className="font-bold">{formatHour(startHour)} – {formatHour(startHour + duration)}</p>
                     <p className="text-white/50 text-sm">{t(sportInfo.label, lang)} × {quantity} · {duration}h</p>
-                    <p className="text-2xl font-black mt-1">{formatPrice(totalPrice)}</p>
+                    {isDarts
+                      ? <p className="text-lg font-black mt-1 text-[#F59E0B]">0,25 € / hra</p>
+                      : <p className="text-2xl font-black mt-1">{formatPrice(totalPrice)}</p>
+                    }
                     <p className="text-white/40 text-xs mt-1">{t(T.booking.payOnSite, lang)}</p>
                   </div>
                   <button onClick={() => setStep('form')} className="px-6 py-3 bg-white text-black font-bold rounded-full hover:bg-white/90 transition-all cursor-pointer">
@@ -532,7 +541,7 @@ export default function RezervaciaPage() {
                   <div><p className="text-white/40 text-xs">{lang === 'sk' ? 'Šport' : 'Sport'}</p><p className="font-bold">{t(sportInfo.label, lang)} × {quantity}</p></div>
                   <div><p className="text-white/40 text-xs">{lang === 'sk' ? 'Dátum' : 'Date'}</p><p className="font-bold">{selectedDate}</p></div>
                   <div><p className="text-white/40 text-xs">{lang === 'sk' ? 'Čas' : 'Time'}</p><p className="font-bold">{formatHour(startHour ?? 0)} – {formatHour((startHour ?? 0) + duration)}</p></div>
-                  <div><p className="text-white/40 text-xs">{t(T.booking.totalPrice, lang)}</p><p className="font-black text-xl">{formatPrice(totalPrice)}</p></div>
+                  <div><p className="text-white/40 text-xs">{t(T.booking.totalPrice, lang)}</p><p className="font-black text-xl">{isDarts ? '0,25 € / hra' : formatPrice(totalPrice)}</p></div>
                 </div>
               </div>
 
