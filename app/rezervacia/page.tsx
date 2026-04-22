@@ -240,6 +240,24 @@ export default function RezervaciaPage() {
           {/* STEP: SPORT */}
           {step === 'sport' && (
             <motion.div key="sport" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}>
+
+              {/* Custom reservation CTA */}
+              <div className="bg-black rounded-3xl p-6 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <p className="font-black text-white text-lg">{lang === 'sk' ? 'Potrebujete vlastnú rezerváciu?' : 'Need a custom booking?'}</p>
+                  <p className="text-white/50 text-sm mt-1">{lang === 'sk' ? 'Skupiny, firemné akcie, celý večer — zavolajte nám.' : 'Groups, events, full evening — give us a call.'}</p>
+                </div>
+                <a
+                  href="tel:+421919080420"
+                  className="shrink-0 inline-flex items-center gap-2 px-5 py-3 bg-white text-black font-bold text-sm rounded-full hover:bg-white/90 transition-all cursor-pointer"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  +421 919 080 420
+                </a>
+              </div>
+
               <h2 className="text-2xl font-black mb-6">{lang === 'sk' ? 'Vyberte šport' : 'Choose sport'}</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {(Object.entries(SPORTS) as [ResourceType, typeof SPORTS[ResourceType]][]).map(([key, info]) => (
@@ -276,8 +294,8 @@ export default function RezervaciaPage() {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {[1, 2].map(n => (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {[1, 2, 3, 4].map(n => (
                   <motion.button
                     key={n}
                     whileHover={{ scale: 1.02 }}
@@ -294,25 +312,6 @@ export default function RezervaciaPage() {
                   </motion.button>
                 ))}
 
-                {/* 3+ → custom */}
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-black rounded-3xl p-8 text-center cursor-pointer"
-                >
-                  <div className="text-6xl font-black mb-2 text-white/30">3+</div>
-                  <div className="text-sm font-semibold text-white/50 mb-4">
-                    {lang === 'sk' ? 'Skupinová rezervácia' : 'Group booking'}
-                  </div>
-                  <a
-                    href="tel:+421919080420"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-white text-black font-bold text-sm rounded-full hover:bg-white/90 transition-all cursor-pointer"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    {lang === 'sk' ? 'Zavolajte nám' : 'Call us'}
-                  </a>
-                </motion.div>
               </div>
             </motion.div>
           )}
